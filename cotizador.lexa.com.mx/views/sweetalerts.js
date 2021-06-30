@@ -57,31 +57,254 @@ console.log(workbookXML);
     }
   })();
 
+// ****************** FUNCION PARA CREAR PDF ***********************//
 
 function getPDF(){
-    var doc = new jsPDF();
+    var doc = new jsPDF('l', 'pt');
     var logo = new Image();
     const hoy = new Date();
     logo.src = 'views/img/logo-big.png';
     doc.setFontSize(15);
-    doc.text("Reporte : " + hoy.toLocaleDateString() + " " + $("#name-empresa").val(), 50, 10);
-    doc.addImage(logo, "PNG", 8, 5, 15, 15);
-    
-    doc.line(10, 23, 200, 23); // horizontal line
+    doc.text("Reporte : " + hoy.toLocaleDateString() + " " + $("#name-empresa").val(), 250, 25);
+    doc.addImage(logo, "PNG", 15, 8, 70, 30);
+    doc.line(15, 43, 825, 43); // horizontal line
     doc.setFontSize(10);
-    doc.text("Zona Geografica : " + $("#salarios_minimos option:selected").text(), 15, 30);
-    doc.text("Comisión del Servicio : " + document.getElementById('comision_servicio').value, 115, 30);
-    doc.text("Factor de Nómina : " + $("#factor_nomina option:selected").text(), 15, 35);
-    doc.text("Salario Propuesto : " + document.getElementById('salario_propuesto').value, 115, 35);
-    //RECORRREMOS LA TABLA
-    doc.setFontSize(7);
-   
-    doc.autoTable({
-        html: '#tabla-nomina',
-        theme: 'grid'
-           });
+    doc.text("Zona Geografica : " + $("#salarios_minimos option:selected").text(), 15, 56);
+    doc.text("Comisión del Servicio : " + document.getElementById('comision_servicio').value, 400, 56);
+    doc.text("Factor de Nómina : " + $("#factor_nomina option:selected").text(), 15, 70);
+    doc.text("Salario Propuesto : " + document.getElementById('salario_propuesto').value, 400, 70); 
+    doc.setFontSize(15);
+    //*********************************************************/
+    //PRIMER TABLA //
+    //**************************************************************/
+
+    //AGREGAMOS EL TITULO DE LA TABLA COTIZADOR IMSS REAL
+    var titulo = ["Tabla Nomina / Nomina Propuesta"];
+    var row =[];
+    doc.autoTable(titulo,row,{
+        margin: {left: 50, right: 50, top:78},
+        headerStyles: {
+            halign: 'center'
+        },
+        didParseCell: function (titulo) {
+                titulo.cell.styles.fillColor = [255,255,255];
+                titulo.cell.styles.textColor = [10, 28, 119];
+        },
+    });
+    //GUARDAMOS LOS DATOS DE LA PRIMER TABLA
+    var columns = ["#", "SALARIO REAL", "FACTOR DE ANTIGÜEDAD", "#", "SALARIO ANTE EL IMSS", "INDEMNIZACIÓN NOM 035"];
+    var rows = Array();
+    $("#tabla-nomina tr").each(function(i, v){
+        rows[i] = Array();
+        $(this).children('td').each(function(ii, vv){
+            rows[i][ii] = Intl.NumberFormat('en-EN').format((parseFloat($(this).text())).toFixed(2));
+        }); 
+    })
+    rows.shift();
+    doc.autoTable(columns, rows,{
+        margin: {left: 10, right: 10},
+        headerStyles: {
+            halign: 'center'
+        },
+        bodyStyles: {
+            halign: 'center'
+        }
+    });
+    //*********************************************************/
+    //SEGUNDA TABLA //
+    //**************************************************************/
+    //AGREGAMOS EL TITULO DE LA TABLA COTIZADOR IMSS REAL
+    var titulo = ["COTIZADOR IMSS REAL"];
+    var row =[];
+    doc.autoTable(titulo,row,{
+        margin: {left: 50, right: 50},
+        headerStyles: {
+            halign: 'center'
+        },
+        didParseCell: function (titulo) {
+                titulo.cell.styles.fillColor = [255,255,255];
+                titulo.cell.styles.textColor = [10, 28, 119];
+        },
+    });
+     //AGREGAMOS LA TABLA DE FORMA MANUAL
+    var columns = ["#", "SXD", "SDI", "SBDC","DT", "SBE", "PR", "RT", "UMA", "CF", "EP", "EO", "PEP", "PEO", "PDP", "PDO", "SIVP", "SIVO", "SR", "CEP", "CEO", "GUAR", "INFON", "TCP", "TCO", "TLM", "ISN"];
+    var rows = Array();
+    $("#cotizador-imss-real tr").each(function(i, v){
+        rows[i] = Array();
+        $(this).children('td').each(function(ii, vv){
+            rows[i][ii] = $(this).text();
+        }); 
+    })
+    rows.shift();
+    doc.autoTable(columns, rows,{
+        margin: {left: 3, right: 3},
+        styles: { fontSize: number = 5}
+    });
+    //*********************************************************/
+    //TERCER TABLA //
+    //**************************************************************/
+    //AGREGAMOS EL TITULO LA TABLA IMSS PROPUESTO
+    var titulo = ["COTIZADOR IMSS PROPUESTO"];
+    var row =[];
+    doc.autoTable(titulo,row,{
+        margin: {left: 50, right: 50},
+        headerStyles: {
+            halign: 'center'
+        },
+        didParseCell: function (titulo) {
+                titulo.cell.styles.fillColor = [255,255,255];
+                titulo.cell.styles.textColor = [10, 28, 119];
+        },
+    });
+    //AGREGAMOS LA TABLA IMSS PROPUESTA
+    var columns_imss_p = ["#", "SXD", "SDI", "SBDC","DT", "S", "PR", "RT", "UMA", "CF", "EP", "EO", "PEP", "PEO", "PDP", "PDO", "SIVP", "SIVO", "SR", "CEP", "CEO", "GUAR", "INFON", "TCP", "TCO", "TLM", "ISN"];
+    var rows_imss_p = Array();
+    $("#cotizador-imss-propuesto tr").each(function(i, v){
+        rows_imss_p[i] = Array();
+        $(this).children('td').each(function(ii, vv){
+            rows_imss_p[i][ii] = $(this).text();
+        }); 
+    })
+    rows_imss_p.shift();
+    doc.autoTable(columns_imss_p, rows_imss_p,{
+        margin: {left: 3, right: 3},
+        styles: { fontSize: number = 5}
+    });
     
+    //*********************************************************/
+    //CUARTA TABLA //
+    //**************************************************************/
+    //AGREGAMOS EL TITULO DE LA TABLA CÁLCULO DE RETENCIONES DE ISR ESQUEMA REAL
+    var titulo = ["CÁLCULO DE RETENCIONES DE ISR ESQUEMA REAL"];
+    var row =[];
+    doc.autoTable(titulo,row,{
+        margin: {left: 50, right: 50},
+        headerStyles: {
+            halign: 'center'
+        },
+        didParseCell: function (titulo) {
+            titulo.cell.styles.fillColor = [255,255,255];
+            titulo.cell.styles.textColor = [10, 28, 119];
+        },
+    });
+    //AGREGAMOS LA TABLA DE FORMA MANUAL
+     var columns = ["CONS", "INGRESOS OBT X SAL", "IMP LOCAL RET TRABAJ", "FACTOR DE NÓMINA","BASE GRAVABLE", "LIM INF ART 96 LISR", "EXCEDENTE S/LIM INF", "% APLICABLE S/EXC LIM INF", "IMP MARGINAL", "CUOTA FIJA", "IMPUESTO SEGUN TARIFA ART 96 LISR", "SUBSIDIO EMPLEO SEGUN TABLA", "SUBSIDIO EMPLEO ENTREG TRABAJ", "RETENCIÓN ISR"];
+     var rows = Array();
+ 
+     $("#cotizador-retisr tr").each(function(i, v){
+        rows[i] = Array();
+         $(this).children('td').each(function(ii, vv){
+            rows[i][ii] = $(this).text();
+         }); 
+     })
+
+    rows.shift(); //SE ELIMINA LA PRIMER FILA
+    doc.autoTable(columns, rows,{
+        margin: {left: 15, right: 15},
+        autoSize : true,
+        styles: { fontSize: number = 8}
+    });
+    //*********************************************************/
+    //QUINTA TABLA //
+    //**************************************************************/
+    //AGREGAMOS EL TITULO DE LA TABLA CÁLCULO DE RETENCIONES DE ISR ESQUEMA REAL
+    var titulo = ["CÁLCULO DE RETENCIONES DE ISR ESQUEMA PROPUESTO"];
+    var row =[];
+    doc.autoTable(titulo,row,{
+        margin: {left: 50, right: 50},
+        headerStyles: {
+            halign: 'center'
+        },
+        didParseCell: function (titulo) {
+            titulo.cell.styles.fillColor = [255,255,255];
+            titulo.cell.styles.textColor = [10, 28, 119];
+        },
+    });
+    //AGREGAMOS LA TABLA DE FORMA MANUAL
+    var columns = ["CONS", "INGRESOS OBT X SALARIO", "FACTOR DE NÓMINA", "BASE GRAVABLE", "LIM INF T ART 96 LISR", "EXCEDENTE S/LIM INFERIOR", "% APLICABLE S/EXC LIM INF", "IMPUESTO MARGINAL", "CUOTA FIJA", "IMPUESTO SEGUN TARIFA ART 96 LISR", "SUBSIDIO EMPLEO SEGÚN TABLA", "SUBSIDIO EMPLEO ENTREGADO TRABAJ", "RETENCIÓN ISR"];
+    var rows = Array();
+    $("#cotizador-retisr-propuesto tr").each(function(i, v){
+        rows[i] = Array();
+        $(this).children('td').each(function(ii, vv){
+            rows[i][ii] = $(this).text();
+        }); 
+    });
+    rows.shift(); //SE ELIMINA LA PRIMER FILA
+    doc.autoTable(columns, rows,{
+        margin: {left: 15, right: 15},
+        autoSize : true,
+        styles: { fontSize: number = 8}
+    });
+    //*********************************************************/
+    //SEXTA TABLA //
+    //**************************************************************/
+    //AGREGAMOS EL TITULO DE LA TABLA DETERMINACIÓN NÓMINA ESQUEMA REAL (100%)
+    var titulo = ["DETERMINACIÓN NÓMINA ESQUEMA REAL (100%)"];
+    var row =[];
+    doc.autoTable(titulo,row,{
+        margin: {left: 50, right: 50},
+        headerStyles: {
+            halign: 'center'
+        },
+        didParseCell: function (titulo) {
+            titulo.cell.styles.fillColor = [255,255,255];
+            titulo.cell.styles.textColor = [10, 28, 119];
+        },
+    });
+    //AGREGAMOS LA TABLA DE FORMA MANUAL
+    var columns = ["CONS", "DÍAS", "SALARIO DIARIO INT", "SUELDO", "SUBSIDIO AL EMPLEO", "TOTAL PERCEPCIONES", "RETENCIÓN ISR", "IMSS", "TOTAL DEDUCCIONES", "NETO NOMINA"];
+    var rows = Array();
+    $("#cotizador-nomina-real tr").each(function(i, v){
+        rows[i] = Array();
+        $(this).children('td').each(function(ii, vv){
+            rows[i][ii] = $(this).text();
+        }); 
+    });
+    rows.shift(); //SE ELIMINA LA PRIMER FILA
+    doc.autoTable(columns, rows,{
+        margin: {left: 15, right: 15},
+        autoSize : true,
+        styles: { fontSize: number = 8}
+    });
+
+    //*********************************************************/
+    //SEPTIMA TABLA //
+    //**************************************************************/
+    //AGREGAMOS EL TITULO DE LA TABLA DETERMINACIÓN NÓMINA ESQUEMA PROPUESTO (INDEMNIZACIÓN)
+    var titulo = ["DETERMINACIÓN NÓMINA ESQUEMA PROPUESTO (INDEMNIZACIÓN)"];
+    var row =[];
+    doc.autoTable(titulo,row,{
+        margin: {left: 50, right: 50},
+        headerStyles: {
+            halign: 'center'
+        },
+        didParseCell: function (titulo) {
+            titulo.cell.styles.fillColor = [255,255,255];
+            titulo.cell.styles.textColor = [10, 28, 119];
+        },
+    });
+
+    //AGREGAMOS LA TABLA DE FORMA MANUAL
+    var columns = ["CONS", "DÍAS", "SALARIO DIARIO INT", "SUELDO", "SUBSIDIO AL EMPLEO", "TOTAL PERCEPCIONES", "RETENCIÓN ISR", "IMSS", "TOTAL DEDUCCIONES", "NETO NOMINA"];
+    var rows = Array();
+    $("#cotizador-nomina-propuesta tr").each(function(i, v){
+        rows[i] = Array();
+        $(this).children('td').each(function(ii, vv){
+            rows[i][ii] = $(this).text();
+        }); 
+    });
+    rows.shift(); //SE ELIMINA LA PRIMER FILA
+    doc.autoTable(columns, rows,{
+        margin: {left: 15, right: 15},
+        autoSize : true,
+        styles: { fontSize: number = 8}
+    });
+
+    
+
+
     doc.save("a4.pdf");
+
 }
 
 
