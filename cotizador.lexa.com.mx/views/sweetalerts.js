@@ -138,7 +138,9 @@ function getPDF(){
     rows.shift();
     doc.autoTable(columns, rows,{
         margin: {left: 3, right: 3},
-        styles: { fontSize: number = 5}
+        styles: { fontSize: number = 5},
+        headerStyles: { halign: 'center' },
+        bodyStyles: { halign: 'center'}
     });
     //*********************************************************/
     //TERCER TABLA //
@@ -168,7 +170,9 @@ function getPDF(){
     rows_imss_p.shift();
     doc.autoTable(columns_imss_p, rows_imss_p,{
         margin: {left: 3, right: 3},
-        styles: { fontSize: number = 5}
+        styles: { fontSize: number = 5},
+        headerStyles: { halign: 'center' },
+        bodyStyles: { halign: 'center'}
     });
     
     //*********************************************************/
@@ -200,9 +204,11 @@ function getPDF(){
 
     rows.shift(); //SE ELIMINA LA PRIMER FILA
     doc.autoTable(columns, rows,{
-        margin: {left: 15, right: 15},
+        margin: {left: 15, right: 15 },
         autoSize : true,
-        styles: { fontSize: number = 8}
+        styles: { fontSize: number = 8 },
+        headerStyles: { halign: 'center' },
+        bodyStyles: { halign: 'center'}
     });
     //*********************************************************/
     //QUINTA TABLA //
@@ -233,7 +239,9 @@ function getPDF(){
     doc.autoTable(columns, rows,{
         margin: {left: 15, right: 15},
         autoSize : true,
-        styles: { fontSize: number = 8}
+        styles: { fontSize: number = 8},
+        headerStyles: { halign: 'center' },
+        bodyStyles: { halign: 'center'}
     });
     //*********************************************************/
     //SEXTA TABLA //
@@ -264,7 +272,9 @@ function getPDF(){
     doc.autoTable(columns, rows,{
         margin: {left: 15, right: 15},
         autoSize : true,
-        styles: { fontSize: number = 8}
+        styles: { fontSize: number = 8},
+        headerStyles: { halign: 'center' },
+        bodyStyles: { halign: 'center'}
     });
 
     //*********************************************************/
@@ -297,10 +307,78 @@ function getPDF(){
     doc.autoTable(columns, rows,{
         margin: {left: 15, right: 15},
         autoSize : true,
-        styles: { fontSize: number = 8}
+        styles: { fontSize: number = 8},
+        headerStyles: { halign: 'center' },
+        bodyStyles: { halign: 'center'}
     });
 
-    
+    //*********************************************************/
+    //CUADRO DE FACTURACION //
+    //**************************************************************/
+    //AGREGAMOS EL TITULO DE LA TABLA FACTURACIÓN
+    var titulo = ["FACTURACIÓN"];
+    var row =[];
+    doc.autoTable(titulo,row,{
+        margin: {left: 50, right: 50},
+        headerStyles: {
+            halign: 'center'
+        },
+        didParseCell: function (titulo) {
+            titulo.cell.styles.fillColor = [255,255,255];
+            titulo.cell.styles.textColor = [10, 28, 119];
+        },
+    });
+    //AGREGAMOS LA TABLA DE FORMA MANUAL
+     var columns = ["CONCEPTO","","IMPORTE"];
+     var rows = Array();
+     $("#cuadro-comparativo-facturacion tr").each(function(i, v){
+         rows[i] = Array();
+         $(this).children('td').each(function(ii, vv){
+             rows[i][ii] = $(this).text();
+         }); 
+     });
+
+     doc.autoTable(columns, rows,{
+         margin: {left: 15, right: 15},
+         autoSize : true,
+         styles: { fontSize: number = 8},
+         headerStyles: { halign: 'center' },
+         bodyStyles: { halign: 'center'}
+     });
+
+    //*********************************************************/
+    //CUADRO COMPARATIVO //
+    //**************************************************************/
+    //AGREGAMOS EL TITULO DE LA TABLA CUADRO COMPARATIVO AHORRO
+    var titulo = ["CUADRO COMPARATIVO AHORRO"];
+    var row =[];
+    doc.autoTable(titulo,row,{
+        margin: {left: 50, right: 50},
+        headerStyles: {
+            halign: 'center'
+        },
+        didParseCell: function (titulo) {
+            titulo.cell.styles.fillColor = [255,255,255];
+            titulo.cell.styles.textColor = [10, 28, 119];
+        },
+    });
+    //AGREGAMOS LA TABLA DE FORMA MANUAL
+     var columns = ["CONCEPTO","ESQUEMA NORMAL NÓMINA 100% IMSS","ESQUEMA PROPUESTO IMSS INDEMNIZACIÓN", "AHORRO", "PROCENTAJE DE AHORRO"];
+     var rows = Array();
+     $("#cuadro-comparativo tr").each(function(i, v){
+         rows[i] = Array();
+         $(this).children('td').each(function(ii, vv){
+             rows[i][ii] = $(this).text();
+         }); 
+     });
+     rows.shift(); //SE ELIMINA LA PRIMER FILA
+     doc.autoTable(columns, rows,{
+         margin: {left: 15, right: 15},
+         autoSize : true,
+         styles: { fontSize: number = 8},
+         headerStyles: { halign: 'center' },
+         bodyStyles: { halign: 'center'}
+     });
 
 
     doc.save("a4.pdf");
