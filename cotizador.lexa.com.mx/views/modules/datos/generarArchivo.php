@@ -510,44 +510,36 @@
         <input type="hidden" name="total_fact_comision" id="total_fact_comision">
 
         <table class="tabla-alta" id="cuadro-comparativo-facturacion">
-            <tr><td colspan="3"  class="listado-th" style="color: white;">FACTURACIÓN </td></tr>
-            <tr>
-                <td>INDEMNIZACIONES</td>
-                <td>
-                </td>
-                <td id="total_fact_indemnizacion_texto">
-                </td>
-            </tr>
-            <tr>
-                <td>COMISIÓN</td>
-                <td>
-                </td>
-                <td id="total_comis_fact_comision_texto">
-                </td>
-            </tr>
-            <tr>
-                <td>SUBTOTAL</td>
-                <td>
-                </td>
-                <td id="subtotal_fact_comision_texto">
-                    
-                </td>
-            </tr>
-            <tr>
-                <td>I.V.A.</td>
-                <td>
-                </td>
-                <td id="iva_fact_comision_texto">
-                    
-                </td>
-            </tr>
-            <tr>
-                <td>TOTAL FACTURA</td>
-                <td>
-                </td>
-                <td id="total_fact_comision_texto">
-                </td>
-            </tr>
+            <thead>
+                <th colspan="3"  class="listado-th" style="color: white;">FACTURACIÓN</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>INDEMNIZACIONES</td>
+                    <td></td>
+                    <td id="total_fact_indemnizacion_texto"></td>
+                </tr>
+                <tr>
+                    <td>COMISIÓN</td>
+                    <td></td>
+                    <td id="total_comis_fact_comision_texto"></td>
+                </tr>
+                <tr>
+                    <td>SUBTOTAL</td>
+                    <td></td>
+                    <td id="subtotal_fact_comision_texto"></td>
+                </tr>
+                <tr>
+                    <td>I.V.A.</td>
+                    <td></td>
+                    <td id="iva_fact_comision_texto"></td>
+                </tr>
+                <tr>
+                    <td>TOTAL FACTURA</td>
+                    <td></td>
+                    <td id="total_fact_comision_texto"></td>
+                </tr>
+            </tbody>
         </table>
     </div>
 
